@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using DevExpress.Mvvm;
 using System.Windows.Input;
-using HomeWork_19_WPF.Model;
 
 namespace HomeWork_19_WPF.ViewModel
 {

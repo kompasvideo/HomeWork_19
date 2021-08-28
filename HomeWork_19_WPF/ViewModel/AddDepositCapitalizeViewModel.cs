@@ -1,36 +1,33 @@
 ﻿using DevExpress.Mvvm;
-using HomeWork_19_WPF.Model;
+using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace HomeWork_19_WPF.ViewModel
 {
     class AddDepositCapitalizeViewModel : ViewModelBase
     {
-        public static DepositPlusCapitalize DepositV { get; set; }
-        static BankDepartment bankDepartment;
+        public static double InterestRate { get; set; }
 
         public AddDepositCapitalizeViewModel()
-        {
-            
+        {            
         }
         /// <summary>
         /// Принимает аргумент BankDepartment pBankDepartment
         /// </summary>
         /// <param name="pBankDepartment"></param>
-        public static void SetBankDepartment(BankDepartment pBankDepartment)
+        public static void SetBankDepartment(int pBankDepartment)
         {
-            DepositV = new DepositPlusCapitalize();
-            bankDepartment = pBankDepartment;
-            switch (bankDepartment)
+            switch (pBankDepartment)
             {
-                case BankDepartment.BusinessDepartment:
-                    DepositV.InterestRate = 12;
+                case 1:
+                    InterestRate = 12;
                     break;
-                case BankDepartment.PersonalDepartment:
-                    DepositV.InterestRate = 24;
+                case 2:
+                    InterestRate = 24;
                     break;
-                case BankDepartment.VIPDepartment:
-                    DepositV.InterestRate = 36;
+                case 3:
+                    InterestRate = 36;
                     break;
             }
         }
@@ -43,7 +40,13 @@ namespace HomeWork_19_WPF.ViewModel
             {
                 return new DelegateCommand((obj) =>
                 {
-                    Messenger.Default.Send(DepositV);
+                    Dictionary<double, Client> bd = new Dictionary<double, Client>();
+                    Client client = new Client();
+                    bd.Add(0, client);
+                    client.Rate = InterestRate;
+                    client.DateOpen = DateTime.Now;
+                    client.Days = 365;
+                    Messenger.Default.Send(bd);
 
                     foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
                     {

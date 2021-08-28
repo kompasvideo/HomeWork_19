@@ -1,5 +1,4 @@
-﻿using HomeWork_19_WPF.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;

@@ -1,5 +1,4 @@
-﻿using HomeWork_19_WPF.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using DevExpress.Mvvm;
@@ -430,21 +429,21 @@ namespace HomeWork_19_WPF.ViewModel
                         {
                             var displayRootRegistry = (Application.Current as App).displayRootRegistry;
                             var addDepositNoCapitalizeViewModel = new AddDepositNoCapitalizeViewModel();
-                            Dictionary<BankDepartment, uint> bd = new Dictionary<BankDepartment, uint>();
+                            Dictionary<int, int> bd = new Dictionary<int, int>();
                             switch (SelectedClient.Department)
                             {
                                 case 2:
-                                    bd.Add(BankDepartment.BusinessDepartment, 0);
+                                    bd.Add(1, 0);
                                     Messenger.Default.Send(bd);
                                     displayRootRegistry.ShowModalPresentation(addDepositNoCapitalizeViewModel);
                                     break;
                                 case 1:
-                                    bd.Add(BankDepartment.PersonalDepartment, 0);
+                                    bd.Add(1, 0);
                                     Messenger.Default.Send(bd);
                                     displayRootRegistry.ShowModalPresentation(addDepositNoCapitalizeViewModel);
                                     break;
                                 case 3:
-                                    bd.Add(BankDepartment.VIPDepartment, 0);
+                                    bd.Add(1, 0);
                                     Messenger.Default.Send(bd);
                                     displayRootRegistry.ShowModalPresentation(addDepositNoCapitalizeViewModel);
                                     break;
@@ -464,14 +463,20 @@ namespace HomeWork_19_WPF.ViewModel
         /// Возвращяет Deposit из окна AddDepositNoCapitalizeWindow
         /// </summary>
         /// <param name="deposit"></param>
-        public static void ReturnAddDepositNoCapitalize(Model.DepositC deposit)
+        public static void ReturnAddDepositNoCapitalize(Dictionary<uint, Client>  deposit)
         {
+            Client client = null;
+            foreach (KeyValuePair<uint, Client> kvp in deposit)
+            {
+                client = kvp.Value;
+                break;
+            }
             // обновленние данных для текущего content
             #region обновленние данных для текущего content
-            SelectedClient.DateOpen = deposit.DateBegin;
+            SelectedClient.DateOpen = client.DateOpen;
             SelectedClient.Deposit = 1;
-            SelectedClient.Days = deposit.Days;
-            SelectedClient.Rate = deposit.InterestRate;
+            SelectedClient.Days = client.Days;
+            SelectedClient.Rate = client.Rate;
             #endregion
 
             BankModel contextLocal = new BankModel();
@@ -481,10 +486,10 @@ namespace HomeWork_19_WPF.ViewModel
                 if (clientL.Id == SelectedClient.Id)
                     SelectedClient = clientL;
             }
-            SelectedClient.DateOpen = deposit.DateBegin;
+            SelectedClient.DateOpen = client.DateOpen;
             SelectedClient.Deposit = 1;
-            SelectedClient.Days = deposit.Days;
-            SelectedClient.Rate = deposit.InterestRate;
+            SelectedClient.Days = client.Days;
+            SelectedClient.Rate = client.Rate;
             contextLocal.SaveChanges();
             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddDepositNoCapitalize, $"Открыт вклад без капитализации % для '{SelectedClient.Name}'"));
         }
@@ -511,21 +516,8 @@ namespace HomeWork_19_WPF.ViewModel
                         {
                             var displayRootRegistry = (Application.Current as App).displayRootRegistry;
                             var addDepositCapitalizeViewModel = new AddDepositCapitalizeViewModel();
-                            switch (SelectedClient.Department)
-                            {
-                                case 2:
-                                    Messenger.Default.Send(BankDepartment.BusinessDepartment);
-                                    displayRootRegistry.ShowModalPresentation(addDepositCapitalizeViewModel);
-                                    break;
-                                case 1:
-                                    Messenger.Default.Send(BankDepartment.PersonalDepartment);
-                                    displayRootRegistry.ShowModalPresentation(addDepositCapitalizeViewModel);
-                                    break;
-                                case 3:
-                                    Messenger.Default.Send(BankDepartment.VIPDepartment);
-                                    displayRootRegistry.ShowModalPresentation(addDepositCapitalizeViewModel);
-                                    break;
-                            }
+                            Messenger.Default.Send(SelectedClient.Department);
+                            displayRootRegistry.ShowModalPresentation(addDepositCapitalizeViewModel);
                         }
                     }
                     catch (Exception ex)
@@ -541,14 +533,20 @@ namespace HomeWork_19_WPF.ViewModel
         /// Возвращяет Deposit из окна AddDepositNoCapitalizeWindow
         /// </summary>
         /// <param name="deposit"></param>
-        public static void ReturnAddDepositCapitalize(Model.DepositC deposit)
+        public static void ReturnAddDepositCapitalize(Dictionary<double, Client> deposit)
         {
+            Client client = null;
+            foreach (KeyValuePair<double, Client> kvp in deposit)
+            {
+                client = kvp.Value;
+                break;
+            }
             // обновленние данных для текущего content
             #region обновленние данных для текущего content
-            SelectedClient.DateOpen = deposit.DateBegin;
+            SelectedClient.DateOpen = client.DateOpen;
             SelectedClient.Deposit = 2;
-            SelectedClient.Days = deposit.Days;
-            SelectedClient.Rate = deposit.InterestRate;
+            SelectedClient.Days = client.Days;
+            SelectedClient.Rate = client.Rate;
             #endregion
 
             BankModel contextLocal = new BankModel();
@@ -558,10 +556,10 @@ namespace HomeWork_19_WPF.ViewModel
                 if (clientL.Id == SelectedClient.Id)
                     SelectedClient = clientL;
             }
-            SelectedClient.DateOpen = deposit.DateBegin;
+            SelectedClient.DateOpen =client.DateOpen;
             SelectedClient.Deposit = 2;
-            SelectedClient.Days = deposit.Days;
-            SelectedClient.Rate = deposit.InterestRate;
+            SelectedClient.Days = client.Days;
+            SelectedClient.Rate = client.Rate;
             contextLocal.SaveChanges();
             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddDepositCapitalize, $"Открыт вклад c капитализацией % для '{SelectedClient.Name}'"));
         }

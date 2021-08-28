@@ -1,10 +1,6 @@
-﻿using HomeWork_19_WPF;
-using HomeWork_19_WPF.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
@@ -23,68 +19,69 @@ namespace HomeWork_19_WPF.Services
         {
             Random rnd = new Random();
             /// Создаём массив клиентов
-            List<HomeWork_19_WPF.Model.Client> personalClients = new List<HomeWork_19_WPF.Model.Client>(kol);
-            List<HomeWork_19_WPF.Model.Client> businessClients = new List<HomeWork_19_WPF.Model.Client>(kol);
-            List<HomeWork_19_WPF.Model.Client> vipClients = new List<HomeWork_19_WPF.Model.Client>(kol);
+            List<Client> Clients = new List<Client>(kol);
             for (int i = 0; i < kol; i++)
             {
-                personalClients.Add(new PersonalClient());
-                businessClients.Add(new BusinessClient());
-                vipClients.Add(new VIPClient());
+                Clients.Add(new Client());
             }
             int count = 0;
             string clientName = "";
             int clientType;
-            int clientID;
-            uint clientMoney;
+            int clientID =0;
+            int clientMoney;
             int select;
             string moveClientName = "";
             try
             {
-                while (count < 10_000_000)
+                while (clientID < 1_000_000)
                 {
-                    clientType = rnd.Next(0, 3);
-                    clientID = rnd.Next(0, kol);
+                    clientType = rnd.Next(1, 4);
+                    Clients[clientID].Department = clientType;
                     switch (clientType)
                     {
-                        case 0:
-                            clientName = personalClients[clientID].Name;
-                            break;
                         case 1:
-                            clientName = businessClients[clientID].Name;
+                            Clients[clientID].Name = $"Физ. лицо - {Guid.NewGuid().ToString().Substring(0, 5)}";
                             break;
                         case 2:
-                            clientName = vipClients[clientID].Name;
+                            Clients[clientID].Name = $"Юр. лицо - {Guid.NewGuid().ToString().Substring(0, 5)}";
+                            break;
+                        case 3:
+                            Clients[clientID].Name = $"VIP - {Guid.NewGuid().ToString().Substring(0, 5)}";
                             break;
                     }
-                    clientMoney = (uint)rnd.Next(10, 101);
+                    Clients[clientID].Money = (int)rnd.Next(10, 1001);
+                    clientID++;
+                }
+                while (count < 10_000_000)
+                {
                     select = rnd.Next(0, 6);
+                    clientID = rnd.Next(0, kol);
                     switch (select)
                     {
                         case 0:
-                            messageParams.Add(new MessageParam(DateTime.Now, MessageType.AddAccount, $"Открыт счёт для '{clientName}' на сумму '{clientMoney}'"));
+                            messageParams.Add(new MessageParam(DateTime.Now, MessageType.AddAccount, $"Открыт счёт для '{Clients[clientID].Name}' на сумму '{Clients[clientID].Money}'"));
                             count++;
                             break;
                         case 1:
-                            messageParams.Add(new MessageParam(DateTime.Now, MessageType.CloseAccount, $"Закрыт счёт для '{clientName}' на сумму '{clientMoney}'"));
+                            messageParams.Add(new MessageParam(DateTime.Now, MessageType.CloseAccount, $"Закрыт счёт для '{Clients[clientID].Name}' на сумму '{Clients[clientID].Money}'"));
                             count++;
                             break;
                         case 2:
                             clientType = rnd.Next(0, 3);
-                            clientID = rnd.Next(0, kol);
+                            clientMoney = (int)rnd.Next(10, 1001);
                             switch (clientType)
                             {
                                 case 0:
-                                    moveClientName = personalClients[clientID].Name;
+                                    moveClientName = Clients[rnd.Next(0, kol)].Name;
                                     break;
                                 case 1:
-                                    moveClientName = businessClients[clientID].Name;
+                                    moveClientName = Clients[rnd.Next(0, kol)].Name;
                                     break;
                                 case 2:
-                                    moveClientName = vipClients[clientID].Name;
+                                    moveClientName = Clients[rnd.Next(0, kol)].Name;
                                     break;
                             }
-                            messageParams.Add(new MessageParam(DateTime.Now, MessageType.MoveMoney, $"Переведена сумма '{clientMoney}' с счёта '{clientName}' на счёт '{moveClientName}'"));
+                            messageParams.Add(new MessageParam(DateTime.Now, MessageType.MoveMoney, $"Переведена сумма '{clientMoney}' с счёта '{Clients[clientID].Name}' на счёт '{moveClientName}'"));
                             count++;
                             break;
                         case 3:

@@ -1,6 +1,5 @@
 ﻿using DevExpress.Mvvm;
 using System.Windows.Input;
-using HomeWork_19_WPF.Model;
 using System.Windows;
 
 namespace HomeWork_19_WPF.ViewModel
@@ -78,6 +77,7 @@ namespace HomeWork_19_WPF.ViewModel
                 });
             }
         }
+
         /// <summary>
         /// Нажата кнопка "Отмена"
         /// </summary>

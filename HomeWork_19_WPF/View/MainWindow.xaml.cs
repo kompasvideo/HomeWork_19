@@ -1,6 +1,5 @@
 ﻿using HomeWork_19_WPF.Messages;
 using HomeWork_19_WPF.Services;
-using HomeWork_19_WPF.Model;
 using HomeWork_19_WPF.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,12 +24,12 @@ namespace HomeWork_19_WPF
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Register <Client >(MainViewModel.ReturnAddClient);
+            Messenger.Default.Register <Client>(MainViewModel.ReturnAddClient);
             Messenger.Default.Register<Dictionary<Client, int>>(MainViewModel.ReturnMoveMoney);
-            Messenger.Default.Register<DepositC>(MainViewModel.ReturnAddDepositNoCapitalize);
-            Messenger.Default.Register<DepositPlusCapitalize>(MainViewModel.ReturnAddDepositCapitalize);
-            Messenger.Default.Register<BankDepartment>(AddDepositCapitalizeViewModel.SetBankDepartment);
-            Messenger.Default.Register<Dictionary<BankDepartment, uint>>(AddDepositNoCapitalizeViewModel.SetBankDepartment);
+            Messenger.Default.Register<Dictionary<uint, Client>>(MainViewModel.ReturnAddDepositNoCapitalize);
+            Messenger.Default.Register<Dictionary<double, Client>>(MainViewModel.ReturnAddDepositCapitalize);
+            Messenger.Default.Register<int>(AddDepositCapitalizeViewModel.SetBankDepartment);
+            Messenger.Default.Register<Dictionary<int, int>>(AddDepositNoCapitalizeViewModel.SetBankDepartment);
             Messenger.Default.Register<Dictionary<Client, short>>(RateViewModel.SetClient);
             Messenger.Default.Register<MessageParam>(Message.SendTo);
         }
@@ -44,10 +43,10 @@ namespace HomeWork_19_WPF
         {
             Messenger.Default.Unregister<Client>(MainViewModel.ReturnAddClient);
             Messenger.Default.Unregister<Dictionary<Client, int>>(MainViewModel.ReturnMoveMoney);
-            Messenger.Default.Unregister<DepositC>(MainViewModel.ReturnAddDepositNoCapitalize);
-            Messenger.Default.Unregister<DepositPlusCapitalize>(MainViewModel.ReturnAddDepositCapitalize);
-            Messenger.Default.Unregister<BankDepartment>(AddDepositCapitalizeViewModel.SetBankDepartment);
-            Messenger.Default.Unregister<Dictionary<BankDepartment, uint>>(AddDepositNoCapitalizeViewModel.SetBankDepartment);
+            Messenger.Default.Unregister<Dictionary<uint, Client>>(MainViewModel.ReturnAddDepositNoCapitalize);
+            Messenger.Default.Unregister<Dictionary<double, Client>>(MainViewModel.ReturnAddDepositCapitalize);
+            Messenger.Default.Unregister<int>(AddDepositCapitalizeViewModel.SetBankDepartment);
+            Messenger.Default.Unregister<Dictionary<int, int>>(AddDepositNoCapitalizeViewModel.SetBankDepartment);
             Messenger.Default.Unregister<Dictionary<Client, short>>(RateViewModel.SetClient);
             Messenger.Default.Unregister<MessageParam>(Message.SendTo);
         }

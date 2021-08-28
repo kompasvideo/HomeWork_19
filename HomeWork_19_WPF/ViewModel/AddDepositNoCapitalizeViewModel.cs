@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using DevExpress.Mvvm;
 using System.Windows.Input;
-using HomeWork_19_WPF.Model;
 
 namespace HomeWork_19_WPF.ViewModel
 {
     class AddDepositNoCapitalizeViewModel : ViewModelBase
     {
-        public static DepositC DepositV { get; set; }
-        static BankDepartment bankDepartment;
+        public static double InterestRate { get; set; }
 
         public AddDepositNoCapitalizeViewModel()
         {            
@@ -21,23 +19,20 @@ namespace HomeWork_19_WPF.ViewModel
         /// Принимает аргумент BankDepartment pBankDepartment
         /// </summary>
         /// <param name="pBankDepartment"></param>
-        public static void SetBankDepartment(Dictionary<BankDepartment, uint> pBankDepartment)
+        public static void SetBankDepartment(Dictionary<int, int> pBankDepartment)
         {
-            DepositV = new DepositC();
-
-            foreach (KeyValuePair<BankDepartment, uint> kvp in pBankDepartment)
-            {
-                bankDepartment = kvp.Key;
-                switch (bankDepartment)
+            foreach (KeyValuePair<int, int> kvp in pBankDepartment)
+            {               
+                switch (kvp.Key)
                 {
-                    case BankDepartment.BusinessDepartment:
-                        DepositV.InterestRate = 10;
+                    case 1:
+                        InterestRate = 10;
                         break;
-                    case BankDepartment.PersonalDepartment:
-                        DepositV.InterestRate = 20;
+                    case 2:
+                        InterestRate = 20;
                         break;
-                    case BankDepartment.VIPDepartment:
-                        DepositV.InterestRate = 30;
+                    case 3:
+                        InterestRate = 30;
                         break;
                 }
             }
@@ -51,7 +46,13 @@ namespace HomeWork_19_WPF.ViewModel
             {
                 return new DelegateCommand((obj) =>
                 {
-                    Messenger.Default.Send(DepositV);
+                    Client client = new Client();
+                    Dictionary<uint, Client> bd = new Dictionary<uint, Client>();
+                    bd.Add(0, client);
+                    client.Rate = InterestRate;
+                    client.DateOpen = DateTime.Now;
+                    client.Days = 365;
+                    Messenger.Default.Send(bd);
 
                     foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
                         {
