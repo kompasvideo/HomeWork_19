@@ -35,43 +35,42 @@ namespace HomeWork_19_WPF.ViewModel
             {
                 return new DelegateCommand((obj) =>
                 {
-                    if (SelectedDep == null)
+
+                    Client client;
+                    switch (SelectedDep)
                     {
-                        MessageBox.Show("Не выбран тип счёта", "Ошибка");
+                        case Const.personalName:
+                            client = new Client();
+                            client.Name = Name;
+                            client.Money = Money;
+                            client.Department = 1;
+                            Messenger.Default.Send(client);
+                            break;
+                        case Const.businessName:
+                            client = new Client();
+                            client.Name = Name;
+                            client.Money = Money;
+                            client.Department = 2;
+                            Messenger.Default.Send(client);
+                            break;
+                        case Const.VIPName:
+                            client = new Client();
+                            client.Name = Name;
+                            client.Money = Money;
+                            client.Department = 3;
+                            Messenger.Default.Send(client);
+                            break;
+                        default:
+
+
+
+                            break;
                     }
-                    else
+                    foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
                     {
-                        Client client;
-                        switch (SelectedDep)
+                        if (window.Title == "Открыть счёт")
                         {
-                            case Const.personalName:
-                                client = new Client();
-                                client.Name = Name;
-                                client.Money = Money;
-                                client.Department = 1;
-                                Messenger.Default.Send(client);
-                                break;
-                            case Const.businessName:
-                                client = new Client();
-                                client.Name = Name;
-                                client.Money = Money;
-                                client.Department = 2;
-                                Messenger.Default.Send(client);
-                                break;
-                            case Const.VIPName:
-                                client = new Client();
-                                client.Name = Name;
-                                client.Money = Money;
-                                client.Department = 3;
-                                Messenger.Default.Send(client);
-                                break;
-                        }
-                        foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
-                        {
-                            if (window.Title == "Открыть счёт")
-                            {
-                                window.Close();
-                            }
+                            window.Close();
                         }
                     }
                 });

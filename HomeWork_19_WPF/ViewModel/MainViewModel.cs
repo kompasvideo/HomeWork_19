@@ -9,6 +9,8 @@ using HomeWork_19_WPF.Services;
 using HomeWork_19_WPF;
 using System.Data.Entity;
 using System.Linq;
+using HomeWork_19_WPF.Model.Clients;
+using HomeWork_19_WPF.Model.Deposit;
 
 namespace HomeWork_19_WPF.ViewModel
 {
@@ -195,10 +197,7 @@ namespace HomeWork_19_WPF.ViewModel
         /// <param name="employee"></param>
         public static void ReturnAddClient(Client client)
         {
-            BankModel contextLocal = new BankModel();
-            contextLocal.Clients.Load();
-            contextLocal.Clients.Add(client);
-            contextLocal.SaveChanges();
+            ConcreteClient.CreateClient(new ClientM(client));
 
             int id = 0;
             switch (SelectedDep)
@@ -224,7 +223,6 @@ namespace HomeWork_19_WPF.ViewModel
                 if (!clientsList.Contains(item))
                     clientsList.Add(item);
             }
-            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddAccount, $"Открыт счёт для '{client.Name}' на сумму '{client.Money}'"));
         }
         #endregion
 
@@ -247,46 +245,33 @@ namespace HomeWork_19_WPF.ViewModel
                         }
                         else
                         {
-                            if (MessageBox.Show($"Закрыть счёт для   '{SelectedClient.Name}'", "Закрыть счёт", MessageBoxButton.YesNo) == MessageBoxResult.No)
-                                return;
-                            string SelectedClientName = SelectedClient.Name;
-                            int SelectedClientMoney = SelectedClient.Money;
-
-                            BankModel contextLocal = new BankModel();
-                            contextLocal.Clients.Load();
-                            foreach(var client in contextLocal.Clients)
+                            if (ConcreteClient.RemoveClient(new ClientM(SelectedClient)))
                             {
-                                if (client.Id == SelectedClient.Id)
-                                    SelectedClient = client;
+                                int id = 0;
+                                switch (SelectedDep)
+                                {
+                                    case "Физ. лицо":
+                                        id = 1;
+                                        break;
+                                    case "Юр. лицо":
+                                        id = 2;
+                                        break;
+                                    case "VIP":
+                                        id = 3;
+                                        break;
+                                }
+                                IQueryable<Client> clients1 = null;
+                                if (SelectedDep != null)
+                                    clients1 = context.Clients.Where(e => e.Department == id);
+                                else
+                                    clients1 = context.Clients;
+                                clientsList.Clear();
+                                foreach (var item in clients1)
+                                {
+                                    if (!clientsList.Contains(item))
+                                        clientsList.Add(item);
+                                }
                             }
-                            contextLocal.Clients.Remove(SelectedClient);
-                            contextLocal.SaveChanges();
-
-                            int id = 0;
-                            switch (SelectedDep)
-                            {
-                                case "Физ. лицо":
-                                    id = 1;
-                                    break;
-                                case "Юр. лицо":
-                                    id = 2;
-                                    break;
-                                case "VIP":
-                                    id = 3;
-                                    break;
-                            }
-                            IQueryable<Client> clients1 = null;
-                            if (SelectedDep != null)
-                                clients1 = context.Clients.Where(e => e.Department == id);
-                            else
-                                clients1 = context.Clients;
-                            clientsList.Clear();
-                            foreach (var item in clients1)
-                            {
-                                if (!clientsList.Contains(item))
-                                    clientsList.Add(item);
-                            }
-                            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.CloseAccount, $"Закрыт счёт для '{SelectedClientName}' на сумму '{SelectedClientMoney}'"));
                         }
                     }
                     catch (NoSelectClientException ex)
@@ -344,61 +329,36 @@ namespace HomeWork_19_WPF.ViewModel
         {
             try
             {
-                int moveMoney;
-                Client moveClient;
-                foreach (KeyValuePair<Client, int> kvp in client)
+                if (ConcreteClient.MoveMoney(new ClientM(SelectedClient), client))
                 {
-                    moveClient = kvp.Key;
-                    moveMoney = kvp.Value;
-                    if (SelectedClient.Money >= moveMoney)
+                    int id = 0;
+                    switch (SelectedDep)
                     {
-                        int moveClientMoney = moveMoney;
-                        string SelectedClientName = SelectedClient.Name;
-                        string moveClientName = moveClient.Name;
-
-                        BankModel contextLocal = new BankModel();
-                        contextLocal.Clients.Load();
-                        foreach (var clientL in contextLocal.Clients)
-                        {
-                            if (clientL.Id == SelectedClient.Id)
-                                SelectedClient = clientL;
-                            if (clientL.Id == moveClient.Id)
-                                moveClient = clientL;
-                        }
-                        SelectedClient.Money -= moveMoney;
-                        moveClient.Money += moveMoney;
-                        contextLocal.SaveChanges();
-
-                        int id = 0;
-                        switch (SelectedDep)
-                        {
-                            case "Физ. лицо":
-                                id = 1;
-                                break;
-                            case "Юр. лицо":
-                                id = 2;
-                                break;
-                            case "VIP":
-                                id = 3;
-                                break;
-                        }
-                        IQueryable<Client> clients1 = null;
-                        if (SelectedDep != null)
-                            clients1 = context.Clients.Where(e => e.Department == id);
-                        else
-                            clients1 = context.Clients;
-                        clientsList.Clear();
-                        foreach (var item in clients1)
-                        {
-                            if (!clientsList.Contains(item))
-                                clientsList.Add(item);
-                        }
-                        Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.MoveMoney, $"Переведена сумма '{moveClientMoney}' с счёта '{SelectedClientName}' на счёт '{moveClientName}'"));
+                        case "Физ. лицо":
+                            id = 1;
+                            break;
+                        case "Юр. лицо":
+                            id = 2;
+                            break;
+                        case "VIP":
+                            id = 3;
+                            break;
                     }
+                    IQueryable<Client> clients1 = null;
+                    if (SelectedDep != null)
+                        clients1 = context.Clients.Where(e => e.Department == id);
                     else
+                        clients1 = context.Clients;
+                    clientsList.Clear();
+                    foreach (var item in clients1)
                     {
-                        MessageBox.Show($"На счёту клиента {SelectedClient} недостаточно средств", "Перевести на другой счёт");
+                        if (!clientsList.Contains(item))
+                            clientsList.Add(item);
                     }
+                }
+                else
+                {
+                    MessageBox.Show($"На счёту клиента {SelectedClient} недостаточно средств", "Перевести на другой счёт");
                 }
             }
             catch (Exception ex)
@@ -479,19 +439,7 @@ namespace HomeWork_19_WPF.ViewModel
             SelectedClient.Rate = client.Rate;
             #endregion
 
-            BankModel contextLocal = new BankModel();
-            contextLocal.Clients.Load();
-            foreach (var clientL in contextLocal.Clients)
-            {
-                if (clientL.Id == SelectedClient.Id)
-                    SelectedClient = clientL;
-            }
-            SelectedClient.DateOpen = client.DateOpen;
-            SelectedClient.Deposit = 1;
-            SelectedClient.Days = client.Days;
-            SelectedClient.Rate = client.Rate;
-            contextLocal.SaveChanges();
-            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddDepositNoCapitalize, $"Открыт вклад без капитализации % для '{SelectedClient.Name}'"));
+            ConcreteDeposit.CreateDeposit(new DepositNoCapitalize(SelectedClient), client);
         }
         #endregion
 
@@ -549,19 +497,7 @@ namespace HomeWork_19_WPF.ViewModel
             SelectedClient.Rate = client.Rate;
             #endregion
 
-            BankModel contextLocal = new BankModel();
-            contextLocal.Clients.Load();
-            foreach (var clientL in contextLocal.Clients)
-            {
-                if (clientL.Id == SelectedClient.Id)
-                    SelectedClient = clientL;
-            }
-            SelectedClient.DateOpen =client.DateOpen;
-            SelectedClient.Deposit = 2;
-            SelectedClient.Days = client.Days;
-            SelectedClient.Rate = client.Rate;
-            contextLocal.SaveChanges();
-            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddDepositCapitalize, $"Открыт вклад c капитализацией % для '{SelectedClient.Name}'"));
+            ConcreteDeposit.CreateDeposit(new DepositNoCapitalize(SelectedClient), client);
         }
         #endregion
 
