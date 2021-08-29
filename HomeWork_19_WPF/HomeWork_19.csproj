@@ -110,15 +110,6 @@
     <Compile Include="EF\Department.cs" />
     <Compile Include="EF\Deposit.cs" />
     <Compile Include="Exceptions\NoSelectClientException.cs" />
-    <Compile Include="Model\Clients\ConcreteClient.cs" />
-    <Compile Include="Model\Clients\ICreateClient .cs" />
-    <Compile Include="Model\Clients\ClientM.cs" />
-    <Compile Include="Model\Clients\IMoveMoney.cs" />
-    <Compile Include="Model\Clients\IRemoveClient.cs" />
-    <Compile Include="Model\Deposit\ConcreteDeposit.cs" />
-    <Compile Include="Model\Deposit\DepositNoCapitalize.cs" />
-    <Compile Include="Model\Deposit\DepositPlusCapitalize.cs" />
-    <Compile Include="Model\Deposit\ICreateDeposit.cs" />
     <Compile Include="Services\Message.cs" />
     <Compile Include="Services\MessageParam.cs" />
     <Compile Include="Services\MessageType.cs" />

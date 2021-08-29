@@ -9,8 +9,6 @@ using HomeWork_19_WPF.Services;
 using HomeWork_19_WPF;
 using System.Data.Entity;
 using System.Linq;
-using HomeWork_19_WPF.Model.Clients;
-using HomeWork_19_WPF.Model.Deposit;
 
 namespace HomeWork_19_WPF.ViewModel
 {
@@ -197,7 +195,11 @@ namespace HomeWork_19_WPF.ViewModel
         /// <param name="employee"></param>
         public static void ReturnAddClient(Client client)
         {
-            ConcreteClient.CreateClient(new ClientM(client));
+            BankModel contextLocal = new BankModel();
+            contextLocal.Clients.Load();
+            contextLocal.Clients.Add(client);
+            contextLocal.SaveChanges();
+            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddAccount, $"Открыт счёт для '{client.Name}' на сумму '{client.Money}'"));
 
             int id = 0;
             switch (SelectedDep)
@@ -245,8 +247,20 @@ namespace HomeWork_19_WPF.ViewModel
                         }
                         else
                         {
-                            if (ConcreteClient.RemoveClient(new ClientM(SelectedClient)))
+                            if (MessageBox.Show($"Закрыть счёт для   '{SelectedClient.Name}'", "Закрыть счёт", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                                return;
+                            string SelectedClientName = SelectedClient.Name;
+                            int SelectedClientMoney = SelectedClient.Money;
+                            BankModel contextLocal = new BankModel();
+                            contextLocal.Clients.Load();
+                            foreach (var l_client in contextLocal.Clients)
                             {
+                                if (l_client.Id == SelectedClient.Id)
+                                    SelectedClient = l_client;
+                            }
+                            contextLocal.Clients.Remove(SelectedClient);
+                            contextLocal.SaveChanges();
+                            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.CloseAccount, $"Закрыт счёт для '{SelectedClientName}' на сумму '{SelectedClientMoney}'"));
                                 int id = 0;
                                 switch (SelectedDep)
                                 {
@@ -270,8 +284,7 @@ namespace HomeWork_19_WPF.ViewModel
                                 {
                                     if (!clientsList.Contains(item))
                                         clientsList.Add(item);
-                                }
-                            }
+                                }                            
                         }
                     }
                     catch (NoSelectClientException ex)
@@ -329,8 +342,33 @@ namespace HomeWork_19_WPF.ViewModel
         {
             try
             {
-                if (ConcreteClient.MoveMoney(new ClientM(SelectedClient), client))
+                int moveMoney = 0;
+                Client moveClient = null;
+                foreach (KeyValuePair<Client, int> kvp in client)
                 {
+                    moveClient = kvp.Key;
+                    moveMoney = kvp.Value;
+                    break;
+                }
+                if (SelectedClient.Money >= moveMoney)
+                {
+                    int moveClientMoney = moveMoney;
+                    string SelectedClientName = SelectedClient.Name;
+                    string moveClientName = moveClient.Name;
+
+                    BankModel contextLocal = new BankModel();
+                    contextLocal.Clients.Load();
+                    foreach (var clientL in contextLocal.Clients)
+                    {
+                        if (clientL.Id == SelectedClient.Id)
+                            SelectedClient = clientL;
+                        if (clientL.Id == moveClient.Id)
+                            moveClient = clientL;
+                    }
+                    SelectedClient.Money -= moveMoney;
+                    moveClient.Money += moveMoney;
+                    contextLocal.SaveChanges();
+                    Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.MoveMoney, $"Переведена сумма '{moveClientMoney}' с счёта '{SelectedClientName}' на счёт '{moveClientName}'"));
                     int id = 0;
                     switch (SelectedDep)
                     {
@@ -439,7 +477,23 @@ namespace HomeWork_19_WPF.ViewModel
             SelectedClient.Rate = client.Rate;
             #endregion
 
-            ConcreteDeposit.CreateDeposit(new DepositNoCapitalize(SelectedClient), client);
+            BankModel contextLocal = new BankModel();
+            contextLocal.Clients.Load();
+            foreach (var clientL in contextLocal.Clients)
+            {
+                if (clientL.Id == SelectedClient.Id)
+                {
+                    SelectedClient = clientL;
+                    break;
+                }
+            }
+            SelectedClient.DateOpen = client.DateOpen;
+            SelectedClient.Deposit = 1;
+            SelectedClient.Days = client.Days;
+            SelectedClient.Rate = client.Rate;
+            contextLocal.SaveChanges();
+            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddDepositNoCapitalize, $"Открыт вклад без капитализации % для '{SelectedClient.Name}'"));
+
         }
         #endregion
 
@@ -497,7 +551,23 @@ namespace HomeWork_19_WPF.ViewModel
             SelectedClient.Rate = client.Rate;
             #endregion
 
-            ConcreteDeposit.CreateDeposit(new DepositNoCapitalize(SelectedClient), client);
+            BankModel contextLocal = new BankModel();
+            contextLocal.Clients.Load();
+            foreach (var clientL in contextLocal.Clients)
+            {
+                if (clientL.Id == SelectedClient.Id)
+                {
+                    SelectedClient = clientL;
+                    break;
+                }
+            }
+            SelectedClient.DateOpen = client.DateOpen;
+            SelectedClient.Deposit = 2;
+            SelectedClient.Days = client.Days;
+            SelectedClient.Rate = client.Rate;
+            contextLocal.SaveChanges();
+            Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddDepositCapitalize, $"Открыт вклад c капитализацией % для '{SelectedClient.Name}'"));
+
         }
         #endregion
 
