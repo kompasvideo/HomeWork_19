@@ -9,6 +9,7 @@ using HomeWork_19_WPF.Services;
 using HomeWork_19_WPF;
 using System.Data.Entity;
 using System.Linq;
+using HomeWork_19_WPF.Model;
 
 namespace HomeWork_19_WPF.ViewModel
 {
@@ -71,10 +72,14 @@ namespace HomeWork_19_WPF.ViewModel
         /// </summary>
         public static ObservableCollection<Client> clientsList { get; set; }
 
+        static RepositoryClient clients;
+
         public MainViewModel()
         {
             if (!isLoad)
             {
+                clients = RepositoryFactory.GetRepository(10);
+                clients.Add(ClientFactory.GetWorker("Физ. лицо", "Физ. лицо - 1", 1024, 1));
                 context = new BankModel();
                 context.Clients.Load();
                 context.Departments.Load();
@@ -195,10 +200,7 @@ namespace HomeWork_19_WPF.ViewModel
         /// <param name="employee"></param>
         public static void ReturnAddClient(Client client)
         {
-            BankModel contextLocal = new BankModel();
-            contextLocal.Clients.Load();
-            contextLocal.Clients.Add(client);
-            contextLocal.SaveChanges();
+            clients.Add(client);
             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddAccount, $"Открыт счёт для '{client.Name}' на сумму '{client.Money}'"));
 
             int id = 0;
@@ -249,42 +251,34 @@ namespace HomeWork_19_WPF.ViewModel
                         {
                             if (MessageBox.Show($"Закрыть счёт для   '{SelectedClient.Name}'", "Закрыть счёт", MessageBoxButton.YesNo) == MessageBoxResult.No)
                                 return;
+                            clients.Remove(SelectedClient);
                             string SelectedClientName = SelectedClient.Name;
-                            int SelectedClientMoney = SelectedClient.Money;
-                            BankModel contextLocal = new BankModel();
-                            contextLocal.Clients.Load();
-                            foreach (var l_client in contextLocal.Clients)
-                            {
-                                if (l_client.Id == SelectedClient.Id)
-                                    SelectedClient = l_client;
-                            }
-                            contextLocal.Clients.Remove(SelectedClient);
-                            contextLocal.SaveChanges();
+                            int SelectedClientMoney = SelectedClient.Money;                            
                             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.CloseAccount, $"Закрыт счёт для '{SelectedClientName}' на сумму '{SelectedClientMoney}'"));
-                                int id = 0;
-                                switch (SelectedDep)
-                                {
-                                    case "Физ. лицо":
-                                        id = 1;
-                                        break;
-                                    case "Юр. лицо":
-                                        id = 2;
-                                        break;
-                                    case "VIP":
-                                        id = 3;
-                                        break;
-                                }
-                                IQueryable<Client> clients1 = null;
-                                if (SelectedDep != null)
-                                    clients1 = context.Clients.Where(e => e.Department == id);
-                                else
-                                    clients1 = context.Clients;
-                                clientsList.Clear();
-                                foreach (var item in clients1)
-                                {
-                                    if (!clientsList.Contains(item))
-                                        clientsList.Add(item);
-                                }                            
+                            int id = 0;
+                            switch (SelectedDep)
+                            {
+                                case "Физ. лицо":
+                                    id = 1;
+                                    break;
+                                case "Юр. лицо":
+                                    id = 2;
+                                    break;
+                                case "VIP":
+                                    id = 3;
+                                    break;
+                            }
+                            IQueryable<Client> clients1 = null;
+                            if (SelectedDep != null)
+                                clients1 = context.Clients.Where(e => e.Department == id);
+                            else
+                                clients1 = context.Clients;
+                            clientsList.Clear();
+                            foreach (var item in clients1)
+                            {
+                                if (!clientsList.Contains(item))
+                                    clientsList.Add(item);
+                            }
                         }
                     }
                     catch (NoSelectClientException ex)
