@@ -61,9 +61,6 @@ namespace HomeWork_19_WPF.ViewModel
                             Messenger.Default.Send(client);
                             break;
                         default:
-
-
-
                             break;
                     }
                     foreach (System.Windows.Window window in System.Windows.Application.Current.Windows)
