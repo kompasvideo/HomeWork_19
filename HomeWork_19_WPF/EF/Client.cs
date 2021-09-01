@@ -26,5 +26,14 @@ namespace HomeWork_19_WPF
         public int? Days { get; set; }
 
         public double? Rate { get; set; }
+        public Client(string name, int money, int department)
+        {
+            Name = name;
+            Money = money;
+            Department = department;
+        }
+        public Client()
+        {
+        }
     }
 }

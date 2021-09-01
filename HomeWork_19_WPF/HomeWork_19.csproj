@@ -110,6 +110,10 @@
     <Compile Include="EF\Department.cs" />
     <Compile Include="EF\Deposit.cs" />
     <Compile Include="Exceptions\NoSelectClientException.cs" />
+    <Compile Include="Model\ClientFactory.cs" />
+    <Compile Include="Model\NullClient.cs" />
+    <Compile Include="Model\RepositoryClient.cs" />
+    <Compile Include="Model\RepositoryFactory.cs" />
     <Compile Include="Services\Message.cs" />
     <Compile Include="Services\MessageParam.cs" />
     <Compile Include="Services\MessageType.cs" />
