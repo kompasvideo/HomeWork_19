@@ -7,6 +7,9 @@ using System.Xml.Serialization;
 
 namespace HomeWork_19_WPF.Services
 {
+    /// <summary>
+    /// Класс - загружает или сохраняет 1_000_000 сообщений
+    /// </summary>
     class SaveMessages
     {
         const int kol = 1_000_000;

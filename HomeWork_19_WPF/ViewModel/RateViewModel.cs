@@ -6,6 +6,9 @@ namespace HomeWork_19_WPF.ViewModel
 {
     class RateViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Строка с процентными ставками за 12 месяцев
+        /// </summary>
         public static string[] MoneyRate { get; set; }
 
         public RateViewModel()

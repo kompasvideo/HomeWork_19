@@ -1,9 +1,21 @@
 ﻿namespace HomeWork_19_WPF
 {
+    /// <summary>
+    /// Класс констант в приложении
+    /// </summary>
     public class Const
     {
-        public const string personalName = "Физ. лицо";
-        public const string businessName = "Юр. лицо";
-        public const string VIPName = "VIP";
+        /// <summary>
+        /// string "Физ. лицо"
+        /// </summary>
+        public const string departmentName_personal = "Физ. лицо";
+        /// <summary>
+        /// string "Юр. лицо"
+        /// </summary>
+        public const string departmentName_business = "Юр. лицо";
+        /// <summary>
+        /// string "VIP"
+        /// </summary>
+        public const string departmentName_VIP = "VIP";
     }
 }

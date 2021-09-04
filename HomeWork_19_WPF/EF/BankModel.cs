@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace HomeWork_19_WPF
 {
+    // класс-потомок DbContext EF 
     public partial class BankModel : DbContext
     {
         public BankModel()

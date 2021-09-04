@@ -7,6 +7,9 @@ namespace HomeWork_19_WPF.ViewModel
 {
     class AddDepositCapitalizeViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Процентная ставка
+        /// </summary>
         public static double InterestRate { get; set; }
 
         public AddDepositCapitalizeViewModel()

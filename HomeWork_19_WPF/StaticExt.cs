@@ -1,15 +1,15 @@
 ﻿namespace HomeWork_19_WPF
 {
     /// <summary>
-    /// Класс с расширяющим методом
-    /// Расчёт % в рублях за месяц
+    /// Класс с расширяющим методом GetSumRateExt для Client
+    /// - Расчёт % в рублях за месяц
     /// </summary>
     public static class StaticExt
     {
         public static byte[] daysOnMonth = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
         /// <summary>
-        /// Расщиряющий метод вместо Deposit.GetSumRate(uint Money)
+        /// Расщиряющий метод - Расчёт % в рублях за месяц
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>

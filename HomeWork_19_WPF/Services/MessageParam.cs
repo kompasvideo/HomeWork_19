@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HomeWork_19_WPF.Services
 {
+    /// <summary>
+    /// Класс параметров для класса Messenger
+    /// </summary>
     public class MessageParam
     {
         public DateTime Date { get; set; }

@@ -5,10 +5,18 @@ using System.Windows;
 
 namespace HomeWork_19_WPF
 {
+    /// <summary>
+    /// Класс для привязки ViewModel к wpf-окну (xaml)
+    /// </summary>
     public class DisplayRootRegistry
     {
         Dictionary<Type, Type> vmToWindowMapping = new Dictionary<Type, Type>();
 
+        /// <summary>
+        /// Регистрирует ViewModel и класс wpf-окна
+        /// </summary>
+        /// <typeparam name="VM"></typeparam>
+        /// <typeparam name="Win"></typeparam>
         public void RegisterWindowType<VM, Win>() where Win : Window, new() where VM : class
         {
             var vmType = typeof(VM);
@@ -20,16 +28,18 @@ namespace HomeWork_19_WPF
             vmToWindowMapping[vmType] = typeof(Win);
         }
 
-        public void UnregisterWindowType<VM>()
-        {
-            var vmType = typeof(VM);
-            if (vmType.IsInterface)
-                throw new ArgumentException("Не зарегистрирован интерфейс");
-            if (!vmToWindowMapping.ContainsKey(vmType))
-                throw new InvalidOperationException(
-                    $"Тип {vmType.FullName} зарегистрирован");
-            vmToWindowMapping.Remove(vmType);
-        }
+        #region Не используется
+        //public void UnregisterWindowType<VM>()
+        //{
+        //    var vmType = typeof(VM);
+        //    if (vmType.IsInterface)
+        //        throw new ArgumentException("Не зарегистрирован интерфейс");
+        //    if (!vmToWindowMapping.ContainsKey(vmType))
+        //        throw new InvalidOperationException(
+        //            $"Тип {vmType.FullName} зарегистрирован");
+        //    vmToWindowMapping.Remove(vmType);
+        //}
+        #endregion
 
         public Window CreateWindowInstanceWithVM(object vm)
         {
@@ -50,34 +60,37 @@ namespace HomeWork_19_WPF
             return window;
         }
 
+        #region Не используется
+        //Dictionary<object, Window> openWindows = new Dictionary<object, Window>();
+        //public void ShowPresentation(object vm)
+        //{
+        //    if (vm == null)
+        //        throw new ArgumentNullException("vm");
+        //    if (openWindows.ContainsKey(vm))
+        //        throw new InvalidOperationException("UI для этого VM уже отображается");
+        //    var window = CreateWindowInstanceWithVM(vm);
+        //    window.Show();
+        //    openWindows[vm] = window;
+        //}
 
-        Dictionary<object, Window> openWindows = new Dictionary<object, Window>();
-        public void ShowPresentation(object vm)
-        {
-            if (vm == null)
-                throw new ArgumentNullException("vm");
-            if (openWindows.ContainsKey(vm))
-                throw new InvalidOperationException("UI для этого VM уже отображается");
-            var window = CreateWindowInstanceWithVM(vm);
-            window.Show();
-            openWindows[vm] = window;
-        }
+        //public void HidePresentation(object vm)
+        //{
+        //    Window window;
+        //    if (!openWindows.TryGetValue(vm, out window))
+        //        throw new InvalidOperationException("UI для этого VM уже отображается");
+        //    window.Close();
+        //    openWindows.Remove(vm);
+        //}
+        #endregion
 
-        public void HidePresentation(object vm)
-        {
-            Window window;
-            if (!openWindows.TryGetValue(vm, out window))
-                throw new InvalidOperationException("UI для этого VM уже отображается");
-            window.Close();
-            openWindows.Remove(vm);
-        }
-
-        //public async Task ShowModalPresentation(object vm)
+        /// <summary>
+        /// Показать окно
+        /// </summary>
+        /// <param name="vm"></param>
         public void ShowModalPresentation(object vm)
         {
             var window = CreateWindowInstanceWithVM(vm);
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            //await window.Dispatcher.InvokeAsync(() => window.ShowDialog());
             window.ShowDialog();
         }
 

@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace HomeWork_19_WPF
 {
+    /// <summary>
+    /// Класс сообщения между ViewModel
+    /// </summary>
     public class Messenger
     {
         public static Messenger Default { get; } = new Messenger();
 
         protected readonly Dictionary<Type, List<Delegate>> actions = new Dictionary<Type, List<Delegate>>();
 
+        /// <summary>
+        /// Регистрация параметризированного делегата для посылки сообщений между ViewModel
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action"></param>
         public void Register<T>(Action<T> action)
         {
             if (action == null)
@@ -32,6 +40,11 @@ namespace HomeWork_19_WPF
             }
         }
 
+        /// <summary>
+        /// отмена регистрации параметризированного делегата для посылки сообщений между ViewModel
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action"></param>
         public void Unregister<T>(Action<T> action)
         {
             if (action == null)
@@ -46,6 +59,11 @@ namespace HomeWork_19_WPF
 
         }
 
+        /// <summary>
+        /// Посылает сообщения между ViewModel
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="message"></param>
         public void Send<T>(T message)
         {
             lock (actions)

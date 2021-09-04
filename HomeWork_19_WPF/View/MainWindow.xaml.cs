@@ -1,5 +1,4 @@
-﻿using HomeWork_19_WPF.Messages;
-using HomeWork_19_WPF.Services;
+﻿using HomeWork_19_WPF.Services;
 using HomeWork_19_WPF.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,6 @@ namespace HomeWork_19_WPF
             Messenger.Default.Register<int>(AddDepositCapitalizeViewModel.SetBankDepartment);
             Messenger.Default.Register<Dictionary<int, int>>(AddDepositNoCapitalizeViewModel.SetBankDepartment);
             Messenger.Default.Register<Dictionary<Client, short>>(RateViewModel.SetClient);
-            Messenger.Default.Register<MessageParam>(Message.SendTo);
         }
 
         /// <summary>
@@ -48,9 +46,13 @@ namespace HomeWork_19_WPF
             Messenger.Default.Unregister<int>(AddDepositCapitalizeViewModel.SetBankDepartment);
             Messenger.Default.Unregister<Dictionary<int, int>>(AddDepositNoCapitalizeViewModel.SetBankDepartment);
             Messenger.Default.Unregister<Dictionary<Client, short>>(RateViewModel.SetClient);
-            Messenger.Default.Unregister<MessageParam>(Message.SendTo);
         }
 
+        /// <summary>
+        /// Событие - Закрытие окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closed(object sender, EventArgs e)
         {
             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.Save, $"Закрытие"));

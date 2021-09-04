@@ -114,7 +114,6 @@
     <Compile Include="Model\NullClient.cs" />
     <Compile Include="Model\RepositoryClient.cs" />
     <Compile Include="Model\RepositoryFactory.cs" />
-    <Compile Include="Services\Message.cs" />
     <Compile Include="Services\MessageParam.cs" />
     <Compile Include="Services\MessageType.cs" />
     <Compile Include="Services\SaveMessages.cs" />

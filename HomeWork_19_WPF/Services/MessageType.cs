@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HomeWork_19_WPF.Services
 {
+    /// <summary>
+    /// Типы операций для Клиента 
+    /// </summary>
     public enum MessageType
     {
         AddAccount,

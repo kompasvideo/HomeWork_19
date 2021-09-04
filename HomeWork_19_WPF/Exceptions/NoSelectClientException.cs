@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HomeWork_19_WPF.Exceptions
 {
+    /// <summary>
+    /// Исключение NoSelectClientException - "Не выбран клиент"
+    /// </summary>
     public class NoSelectClientException : Exception
     {
         private string messageDetails = string.Empty;

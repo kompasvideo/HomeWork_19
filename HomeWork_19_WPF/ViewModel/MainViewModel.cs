@@ -19,7 +19,7 @@ namespace HomeWork_19_WPF.ViewModel
         /// Названия департаментов банка
         /// </summary>
         public ObservableCollection<string> departments { get; set; } = new ObservableCollection<string>()
-            {Const.personalName, Const.businessName, Const.VIPName};
+            {Const.departmentName_personal, Const.departmentName_business, Const.departmentName_VIP};
         /// <summary>
         /// Выбранный клинт в списке
         /// </summary>
@@ -72,6 +72,9 @@ namespace HomeWork_19_WPF.ViewModel
         /// </summary>
         public static ObservableCollection<Client> clientsList { get; set; }
 
+        /// <summary>
+        /// Экземпляр типа RepositoryClient
+        /// </summary>
         static RepositoryClient clients;
 
         public MainViewModel()
@@ -79,7 +82,7 @@ namespace HomeWork_19_WPF.ViewModel
             if (!isLoad)
             {
                 clients = RepositoryFactory.GetRepository(10);
-                clients.Add(ClientFactory.GetWorker("Физ. лицо", "Физ. лицо - 1", 1024, 1));
+                clients.Add(ClientFactory.GetClient(Const.departmentName_personal, "Физ. лицо - 1", 1024));
                 context = new BankModel();
                 context.Clients.Load();
                 context.Departments.Load();
@@ -138,13 +141,13 @@ namespace HomeWork_19_WPF.ViewModel
                         switch ((int)client.Department)
                         {
                             case 1:
-                                SelectClientType = "Физ. лицо";
+                                SelectClientType = Const.departmentName_personal;
                                 break;
                             case 2:
-                                SelectClientType = "Юр. лицо";
+                                SelectClientType = Const.departmentName_business;
                                 break;
                             case 3:
-                                SelectClientType = "VIP";
+                                SelectClientType = Const.departmentName_VIP;
                                 break;
                         }
                         if (client.Deposit > 0)
@@ -206,13 +209,13 @@ namespace HomeWork_19_WPF.ViewModel
             int id = 0;
             switch (SelectedDep)
             {
-                case "Физ. лицо":
+                case Const.departmentName_personal:
                     id = 1;
                     break;
-                case "Юр. лицо":
+                case Const.departmentName_business:
                     id = 2;
                     break;
-                case "VIP":
+                case Const.departmentName_VIP:
                     id = 3;
                     break;
             }
@@ -258,13 +261,13 @@ namespace HomeWork_19_WPF.ViewModel
                             int id = 0;
                             switch (SelectedDep)
                             {
-                                case "Физ. лицо":
+                                case Const.departmentName_personal:
                                     id = 1;
                                     break;
-                                case "Юр. лицо":
+                                case Const.departmentName_business:
                                     id = 2;
                                     break;
-                                case "VIP":
+                                case Const.departmentName_VIP:
                                     id = 3;
                                     break;
                             }
@@ -366,13 +369,13 @@ namespace HomeWork_19_WPF.ViewModel
                     int id = 0;
                     switch (SelectedDep)
                     {
-                        case "Физ. лицо":
+                        case Const.departmentName_personal:
                             id = 1;
                             break;
-                        case "Юр. лицо":
+                        case Const.departmentName_business:
                             id = 2;
                             break;
-                        case "VIP":
+                        case Const.departmentName_VIP:
                             id = 3;
                             break;
                     }
@@ -611,26 +614,14 @@ namespace HomeWork_19_WPF.ViewModel
         /// <summary>
         /// Создать Log
         /// </summary>
-        public ICommand CreateLog_Click
-        {
-            get
-            {
-                return new DelegateCommand((obj) => SaveMessages.Save());               
-            }
-        }
+        public ICommand CreateLog_Click => new DelegateCommand((obj) => SaveMessages.Save());
         #endregion
 
         #region Загрузить Log
         /// <summary>
         /// Загрузить Log
         /// </summary>
-        public ICommand LoadLog_Click
-        {
-            get
-            {
-                return new DelegateCommand(async (obj) => await SaveMessages.Load());                 
-            }
-        }
+        public ICommand LoadLog_Click => new DelegateCommand(async (obj) => await SaveMessages.Load());
         #endregion
 
     }

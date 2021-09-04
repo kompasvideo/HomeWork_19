@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace HomeWork_19_WPF.Model
 {
+    /// <summary>
+    /// Хранит context таблицы Clients из EF
+    /// </summary>
     class RepositoryClient
     {
         BankModel context;
@@ -18,11 +21,20 @@ namespace HomeWork_19_WPF.Model
         {
             this.context = context;
         }
+
+        /// <summary>
+        /// Добавление нового экземпляра в таблицу Clients EF
+        /// </summary>
+        /// <param name="client">экземляр типа Client</param>
         public void Add(Client client)
         {
             context.Clients.Add(client);
             context.SaveChanges();
         }
+        /// <summary>
+        /// Удаление экземпляра типа Client из таблицы Clients EF
+        /// </summary>
+        /// <param name="client"></param>
         public void Remove(Client client)
         {
             Client r_client = null;

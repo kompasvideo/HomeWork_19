@@ -6,6 +6,9 @@ namespace HomeWork_19_WPF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
+    /// <summary>
+    /// Класс-псевдоним строки из таблицы Clients EF
+    /// </summary>
     public partial class Client
     {
         public int Id { get; set; }

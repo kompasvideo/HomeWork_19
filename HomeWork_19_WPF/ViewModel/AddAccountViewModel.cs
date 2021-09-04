@@ -39,21 +39,21 @@ namespace HomeWork_19_WPF.ViewModel
                     Client client;
                     switch (SelectedDep)
                     {
-                        case Const.personalName:
+                        case Const.departmentName_personal:
                             client = new Client();
                             client.Name = Name;
                             client.Money = Money;
                             client.Department = 1;
                             Messenger.Default.Send(client);
                             break;
-                        case Const.businessName:
+                        case Const.departmentName_business:
                             client = new Client();
                             client.Name = Name;
                             client.Money = Money;
                             client.Department = 2;
                             Messenger.Default.Send(client);
                             break;
-                        case Const.VIPName:
+                        case Const.departmentName_VIP:
                             client = new Client();
                             client.Name = Name;
                             client.Money = Money;

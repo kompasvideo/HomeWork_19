@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace HomeWork_19_WPF.Model
 {
+    /// <summary>
+    /// Класс добавляет несколько строк в таблицу Clients EF
+    /// </summary>
     class RepositoryFactory
     {
         static Random r;
         static RepositoryFactory() { r = new Random(); }
 
+        /// <summary>
+        /// Возвращяет экземпляр RepositoryClient с созданными клиентами
+        /// </summary>
+        /// <param name="Count">количество клиентов</param>
+        /// <returns></returns>
         public static RepositoryClient GetRepository(int Count)
         {
 
