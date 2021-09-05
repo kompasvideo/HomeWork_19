@@ -20,20 +20,12 @@ namespace HomeWork_19_WPF.Model
         /// <returns></returns>
         public static Client GetClient(string DepartmentName,
                                         string Name,
-                                        int Money)
+                                        int Money) => DepartmentName switch
         {
-            switch (DepartmentName)
-            {
-                case Const.departmentName_personal: 
-                    return new Client(Name, Money, 1);
-                case Const.departmentName_business: 
-                    return new Client(Name, Money, 2);
-                case Const.departmentName_VIP: 
-                    return new Client(Name, Money, 3);
-                default:
-                    NullClient nullClient = new NullClient();
-                    return nullClient.GetClient();
-            }
-        }
+            Const.departmentName_personal => new Client(Name, Money, 1),
+            Const.departmentName_business => new Client(Name, Money, 2),
+            Const.departmentName_VIP => new Client(Name, Money, 3),
+            _ => new NullClient().GetClient(),            
+        };
     }
 }

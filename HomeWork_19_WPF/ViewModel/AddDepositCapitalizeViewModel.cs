@@ -21,19 +21,18 @@ namespace HomeWork_19_WPF.ViewModel
         /// <param name="pBankDepartment"></param>
         public static void SetBankDepartment(int pBankDepartment)
         {
-            switch (pBankDepartment)
+            InterestRate  = Getrate(pBankDepartment);
+
+            int Getrate(int pBankDepartment) => pBankDepartment switch
             {
-                case 1:
-                    InterestRate = 12;
-                    break;
-                case 2:
-                    InterestRate = 24;
-                    break;
-                case 3:
-                    InterestRate = 36;
-                    break;
-            }
+                1 => 12,
+                2 => 24,
+                3 => 36,
+            };
         }
+
+        
+
         /// <summary>
         /// Нажата кнопка "Ок"
         /// </summary>

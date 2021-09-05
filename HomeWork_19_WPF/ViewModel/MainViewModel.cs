@@ -10,6 +10,7 @@ using System.Linq;
 using HomeWork_19_WPF.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using HomeWork_19;
 
 namespace HomeWork_19_WPF.ViewModel
 {
@@ -198,6 +199,7 @@ namespace HomeWork_19_WPF.ViewModel
                 var a = new DelegateCommand((obj) =>
                 {
                     var displayRootRegistry = (Application.Current as App).displayRootRegistry;
+                    //var displayRootRegistry = App.displayRootRegistry;
 
                     var addAccountViewModel = new AddAccountViewModel();
                     displayRootRegistry.ShowModalPresentation(addAccountViewModel);
@@ -215,18 +217,7 @@ namespace HomeWork_19_WPF.ViewModel
             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.AddAccount, $"Открыт счёт для '{client.Name}' на сумму '{client.Money}'"));
 
             int id = 0;
-            switch (SelectedDep)
-            {
-                case Const.departmentName_personal:
-                    id = 1;
-                    break;
-                case Const.departmentName_business:
-                    id = 2;
-                    break;
-                case Const.departmentName_VIP:
-                    id = 3;
-                    break;
-            }
+            id = GetId(id, SelectedDep);
             IQueryable<Client> clients1 = null;
             if (SelectedDep != null)
                 clients1 = context.Clients.Where(e => e.Department == id);
@@ -238,7 +229,16 @@ namespace HomeWork_19_WPF.ViewModel
                 if (!clientsList.Contains(item))
                     clientsList.Add(item);
             }
+
+
+            int GetId(int id, string SelectedDep) => SelectedDep switch
+            {
+                Const.departmentName_personal => 1,
+                Const.departmentName_business => 2,
+                Const.departmentName_VIP => 3,
+            };
         }
+
         #endregion
 
 
@@ -326,7 +326,7 @@ namespace HomeWork_19_WPF.ViewModel
                         else
                         {
                             var displayRootRegistry = (Application.Current as App).displayRootRegistry;
-
+                            //var displayRootRegistry = App.displayRootRegistry;
                             var moveMoneyViewModel = new MoveMoneyViewModel();
                             displayRootRegistry.ShowModalPresentation(moveMoneyViewModel);
                         }                        
@@ -431,6 +431,7 @@ namespace HomeWork_19_WPF.ViewModel
                         else
                         {
                             var displayRootRegistry = (Application.Current as App).displayRootRegistry;
+                            //var displayRootRegistry = App.displayRootRegistry;
                             var addDepositNoCapitalizeViewModel = new AddDepositNoCapitalizeViewModel();
                             Dictionary<int, int> bd = new Dictionary<int, int>();
                             switch (SelectedClient.Department)
@@ -522,6 +523,7 @@ namespace HomeWork_19_WPF.ViewModel
                         else
                         {
                             var displayRootRegistry = (Application.Current as App).displayRootRegistry;
+                            //var displayRootRegistry = App.displayRootRegistry;
                             var addDepositCapitalizeViewModel = new AddDepositCapitalizeViewModel();
                             Messenger.Default.Send(SelectedClient.Department);
                             displayRootRegistry.ShowModalPresentation(addDepositCapitalizeViewModel);
@@ -598,6 +600,7 @@ namespace HomeWork_19_WPF.ViewModel
                             if (SelectedClient.Deposit > 0)
                             {
                                 var displayRootRegistry = (Application.Current as App).displayRootRegistry;
+                                //var displayRootRegistry = App.displayRootRegistry;
                                 var rateViewModel = new RateViewModel();
                                 Dictionary<Client, short> client = new Dictionary<Client, short>();
                                 client.Add(SelectedClient, 0);
