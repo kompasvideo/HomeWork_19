@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,15 +37,7 @@ namespace HomeWork_19_WPF.ViewModel
             {
                 context = new BankModel();
                 context.Clients.Load();
-                clientsList = new ObservableCollection<Client>();
-                List<Client> l_clients = context.Clients.Local.ToList();
-                if (l_clients != null)
-                {
-                    foreach (var client in l_clients)
-                    {
-                        clientsList.Add(client);
-                    }
-                }
+                clientsList = context.Clients.Local;
                 isLoad = true;
             }
         }

@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HomeWork_19_WPF.Exceptions
+{
+    /// <summary>
+    /// Исключение NoSelectClientException - "Не выбран клиент"
+    /// </summary>
+    public class NoSelectClientException : Exception
+    {
+        private string messageDetails = string.Empty;
+        public NoSelectClientException()
+        {
+        }
+
+        public NoSelectClientException(string message) : base(message)
+        {
+            messageDetails = message;
+        }
+        public override string Message => messageDetails;
+    }
+}

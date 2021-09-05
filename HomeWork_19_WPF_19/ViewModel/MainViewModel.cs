@@ -6,14 +6,14 @@ using System.Windows.Input;
 using System.Windows;
 using HomeWork_19_WPF.Exceptions;
 using HomeWork_19_WPF.Services;
+using HomeWork_19_WPF;
+using System.Data.Entity;
 using System.Linq;
 using HomeWork_19_WPF.Model;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace HomeWork_19_WPF.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    class MainViewModel : ViewModelBase
     {
         /// <summary>
         /// Названия департаментов банка
@@ -86,15 +86,7 @@ namespace HomeWork_19_WPF.ViewModel
                 context = new BankModel();
                 context.Clients.Load();
                 context.Departments.Load();
-                clientsList = new ObservableCollection<Client>();
-                List<Client> l_clients = context.Clients.Local.ToList();
-                if (l_clients != null)
-                {
-                    foreach (var client in l_clients)
-                    {
-                        clientsList.Add(client);
-                    }
-                }
+                clientsList = context.Clients.Local;
                 isLoad = true;
             }
         }
