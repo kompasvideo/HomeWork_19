@@ -1,14 +1,9 @@
-﻿using HomeWork_19_WPF.View;
+﻿using HomeWork_19_WPF;
+using HomeWork_19_WPF.View;
 using HomeWork_19_WPF.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace HomeWork_19_WPF
+namespace HomeWork_19
 {
     /// <summary>
     /// Interaction logic for App.xaml

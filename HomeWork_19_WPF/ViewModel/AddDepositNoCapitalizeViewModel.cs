@@ -25,21 +25,25 @@ namespace HomeWork_19_WPF.ViewModel
         public static void SetBankDepartment(Dictionary<int, int> pBankDepartment)
         {
             foreach (KeyValuePair<int, int> kvp in pBankDepartment)
-            {               
-                switch (kvp.Key)
-                {
-                    case 1:
-                        InterestRate = 10;
-                        break;
-                    case 2:
-                        InterestRate = 20;
-                        break;
-                    case 3:
-                        InterestRate = 30;
-                        break;
-                }
+            {
+                InterestRate = GetRate(kvp);
+                break;
             }
+
+            /// <summary>
+            /// Вернуть процентную ставку 
+            /// </summary>
+            /// <param name="kvp"></param>
+            /// <returns>Процентная ставка</returns>
+            int GetRate(KeyValuePair<int, int> kvp) => kvp.Key switch
+            {
+                1 => 10,
+                2 => 20,
+                3 => 30,
+            };
         }
+        
+
         /// <summary>
         /// Нажата кнопка "Ок"
         /// </summary>
