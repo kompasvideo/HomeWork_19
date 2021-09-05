@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>HomeWork_19_WPF</AssemblyName>
     <RootNamespace>HomeWork_19_WPF</RootNamespace>
+    <StartupObject>HomeWork_19.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
