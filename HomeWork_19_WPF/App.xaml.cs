@@ -1,11 +1,17 @@
 ﻿using HomeWork_19_WPF.View;
 using HomeWork_19_WPF.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace HomeWork_19_WPF
 {
     /// <summary>
-    /// Логика взаимодействия для App.xaml
+    /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
@@ -13,7 +19,7 @@ namespace HomeWork_19_WPF
         MainViewModel mainWindowViewModel;
 
         public App()
-        {            
+        {
             displayRootRegistry.RegisterWindowType<MainViewModel, MainWindow>();
             displayRootRegistry.RegisterWindowType<AddAccountViewModel, AddAccountWindow>();
             displayRootRegistry.RegisterWindowType<AddDepositCapitalizeViewModel, AddDepositCapitalizeWindow>();
@@ -28,7 +34,7 @@ namespace HomeWork_19_WPF
             mainWindowViewModel = new MainViewModel();
 
             displayRootRegistry.ShowModalPresentation(mainWindowViewModel);
-            
+
             Shutdown();
         }
     }

@@ -56,6 +56,6 @@ namespace HomeWork_19_WPF
         private void Window_Closed(object sender, EventArgs e)
         {
             Messenger.Default.Send(new MessageParam(DateTime.Now, MessageType.Save, $"Закрытие"));
-        }
+        }        
     }
 }
